@@ -59,6 +59,8 @@ public class HomePageTest extends BaseClass {
 	public void nullPointerExceptionTest() {
 		homePage.clickNewUserRegistration();
 	}
+	
+	// we are creating a branch, so brought changes
 		
 	
 
