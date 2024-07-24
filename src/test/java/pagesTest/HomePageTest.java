@@ -1,7 +1,7 @@
 package pagesTest;
 
-import org.testng.annotations.Test;
 
+import org.testng.annotations.Test;
 import baseUtil.BaseClass;
 
 public class HomePageTest extends BaseClass {
@@ -11,12 +11,12 @@ public class HomePageTest extends BaseClass {
 	// (enabled = false) means The test case is disable, it is not running
 	// priority = 1 means, this test case will run first, 2 means second .... ... so on
 	
-	@Test (enabled = false, priority = 1)
+	@Test (enabled = true, priority = 1)
 	public void clickLogoTest() {
 		homePage.clickLogo();
 	}
 	
-	@Test (enabled = false, priority = 2)
+	@Test (enabled = true, priority = 2)
 	public void clickLoginButtonTest() throws InterruptedException {
 		homePage.clickLoginButton();
 	}
@@ -60,7 +60,20 @@ public class HomePageTest extends BaseClass {
 		homePage.clickNewUserRegistration();
 	}
 	
-	// we are creating a branch, so brought changes
+	@Test
+	public void inputTextInUserIdFieldTest () {
+		homePage.inputTextInUserIdField();
+	}
+	
+	@Test
+	public void inputTextInUserIdAndPasswordFieldThenIAgreeAndClickToTheLoginButtonTest() {
+		homePage.inputTextInUserIdAndPasswordFieldThenIAgreeAndClickToTheLoginButton();
+	}
+	
+	@Test
+	public void useOfByClassInLoginProcessTest() throws InterruptedException {
+		homePage.useOfByClassInLoginProcess();
+	}
 		
 	
 

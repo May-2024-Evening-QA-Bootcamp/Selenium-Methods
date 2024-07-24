@@ -7,6 +7,11 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
 
+// new, you have to manually write it to get access of common actions
+// this is possible when they are static in nature, * means all
+// This is called static import
+import static common.CommonActions.*;
+
 public class HomePage {
 	WebDriver driver;
 
@@ -53,32 +58,32 @@ public class HomePage {
 	WebElement incorrectNewUserRegistration;
 	
 	@FindBy(xpath = "//label[@id='cms-label-tc']")
-	WebElement checkBox;
+	WebElement termsAndCondition;
 	
 	public void clickLogo() {
-		logo.click();
+		logo.click(); // common method 'clickElement()' is not used here
 	}
 	
 	// We used throws to handle exception in this method
-	public void clickLoginButton() throws InterruptedException {
-		Thread.sleep(4000);
-		loginButton.click();
-		Thread.sleep(4000);		
+	public void clickLoginButton() {
+		pause(4000); // common method 'pause()' is used from here
+		clickElement(loginButton); // common method 'clickElement()' is used from here
+		pause(4000);	
 	}
 	
 	public void clickUserId() {
-		userId.click();
+		clickElement(userId);
 	}
 	
 	public void clickPassword() {
-		password.click();
+		clickElement(password);
 	}
 	
 	// We used try-catch block to handle exception in this method
 	public void clickNewUserRegistration() {
 		try {
 			Thread.sleep(4000);
-			newUserRegistration.click();
+			clickElement(newUserRegistration);
 			Thread.sleep(4000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -102,12 +107,45 @@ public class HomePage {
 	public void clickIncorrectNewUserRegistration() {
 		try {
 			Thread.sleep(4000);
-			incorrectNewUserRegistration.click();
+			clickElement(incorrectNewUserRegistration);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
 	
+	// We are using sendKeys() method to input the text in any field
+	public void inputTextInUserIdField () {
+		pause(4000);
+		userId.sendKeys("May2024QA"); // common method 'inputText()' is not used here
+		pause(4000);
+	}
+	
+	// We are using 3 common actions here
+	public void inputTextInUserIdAndPasswordFieldThenIAgreeAndClickToTheLoginButton() {
+		pause(4000);
+		inputText(userId, "enthrall_12");
+		inputText(password, "OnthrallTest@1234");
+		pause(4000);
+		clickElement(termsAndCondition);
+		pause(4000);
+		clickElement(loginButton);
+		pause(4000);
+	}
+	
+	// Alternate of above method {Raw Code, some people use like this way}
+	// We can use a web element directly in the method, that is also common
+	// we don't need to create "webElement" and "common method"
+	public void useOfByClassInLoginProcess() throws InterruptedException {
+		Thread.sleep(4000);
+		driver.findElement(By.name("user-d")).sendKeys("enthrall_12");
+		driver.findElement(By.name("pass-d")).sendKeys("OnthrallTest@1234");
+		Thread.sleep(4000);
+		driver.findElement(By.xpath("//label[@id='cms-label-tc']")).click();
+		Thread.sleep(4000);
+		driver.findElement(By.id("cms-login-submit")).click();
+		Thread.sleep(4000);
+	}
+
 	
 	
 	
