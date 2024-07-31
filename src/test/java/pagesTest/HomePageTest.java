@@ -165,7 +165,7 @@ public class HomePageTest extends BaseClass {
 		homePage.use_of_getAttribute_method();
 	}
 	
-	@Test
+	@Test (enabled = true, priority = 3)
 	public void use_of_clear_in_login_test() {
 		homePage.use_of_clear_in_login();
 	}
