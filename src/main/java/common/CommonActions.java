@@ -1,9 +1,19 @@
 package common;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
+
+import com.google.common.io.Files;
 
 import reports.Loggers;
 
@@ -111,6 +121,31 @@ public class CommonActions {
 		}
 	}
 	
+	// very very important interview question
+	public static String getSreenShot(String testName, WebDriver driver) {
+		TakesScreenshot ss = (TakesScreenshot) driver;
+		String path = System.getProperty("user.dir") + "/test-output/screenShots";
+		File folder = new File(path);
+		if (!folder.exists()) {
+			folder.mkdirs();
+		}
+
+		Date date = new Date();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("MMddyyyy_hh.mm.ss");
+		String formattedDate = dateFormat.format(date);
+
+		File targetFile = new File(path + "/error_" + testName + "_" + formattedDate + ".png");
+		try {
+			File srcFile = ss.getScreenshotAs(OutputType.FILE);
+			Files.copy(srcFile, targetFile);
+			Loggers.logTheTest("Screenshot has been successfully capture at: \n" + targetFile.getAbsolutePath());
+		} catch (WebDriverException | IOException e) {
+			e.printStackTrace();
+			Loggers.logTheTest("Screenshot cannot be captured");
+		}
+		return targetFile.getAbsolutePath();
+	}
+
 				
 	
 	
