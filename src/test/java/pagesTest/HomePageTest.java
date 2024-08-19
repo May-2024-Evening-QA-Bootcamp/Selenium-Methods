@@ -1,6 +1,13 @@
 package pagesTest;
 
 
+import static common.CommonActions.clickElement;
+import static common.CommonActions.elementDisplayed;
+import static common.CommonActions.pause;
+import static common.CommonActions.verifyTextOfTheWebElement;
+
+import java.util.Set;
+
 import org.testng.annotations.Test;
 import baseUtil.BaseClass;
 
@@ -168,6 +175,11 @@ public class HomePageTest extends BaseClass {
 	@Test (enabled = true, priority = 3)
 	public void use_of_clear_in_login_test() {
 		homePage.use_of_clear_in_login();
+	}
+	
+	@Test()
+	public void switch_between_window_test() {
+		homePage.switch_between_window();
 	}
 	
 	

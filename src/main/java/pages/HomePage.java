@@ -8,10 +8,14 @@ import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
+import net.bytebuddy.asm.MemberSubstitution.FieldValue;
+
 // new, you have to manually write it to get access of common actions
 // this is possible when they are static in nature, * means all
 // This is called static import
 import static common.CommonActions.*;
+
+import java.util.Set;
 
 public class HomePage {
 	WebDriver driver;
@@ -69,6 +73,12 @@ public class HomePage {
 	
 	@FindBy(css = "em.cms-icon.cms-sprite-loggedout.ms-3")
 	WebElement logoByCssSelector;
+	
+	@FindBy(xpath = "//span[text()='Help']")
+	WebElement help;
+	
+	@FindBy(xpath = "//h1[text()='CMS Enterprise Portal - Help Center']")
+	WebElement helpPageHeader;
 	
 	public void clickLogo() {
 		logo.click(); // common method 'clickElement()' is not used here
@@ -347,7 +357,7 @@ public class HomePage {
 	public void newUserRegistrationPageValidation() {
 		pause(3000);
 		elementDisplayed(logo);
-		verifyTitle(driver, "CMS Enterprise Portal");
+		verifyTitle(driver, " CMS Enterprise Portal");
 		verifyCurrentUrl(driver, "https://portal.cms.gov/portal/");
 		elementEnabled(newUserRegistration);
 		verifyTextOfTheWebElement(newUserRegistration, "New User Registration");
@@ -389,6 +399,20 @@ public class HomePage {
 		elementEnabled(loginButton); 
 		verifyTextOfTheWebElement(loginButton, "Login");
 		clickElement(loginButton);
+		pause(4000);
+	}
+	
+	public void switch_between_window() {
+		elementDisplayed(help);
+		clickElement(help); // a child window will open
+		pause(4000);
+		Set<String> allWindowHandles =  driver.getWindowHandles();
+		// Extract Parent and child window from all window handles
+		String parent = (String)allWindowHandles.toArray()[0];
+		String child = (String)allWindowHandles.toArray()[1];
+		driver.switchTo().window(child);
+		pause(4000);
+		verifyTextOfTheWebElement(helpPageHeader, "CMS Enterprise Portal - Help Center");
 		pause(4000);
 	}
 
