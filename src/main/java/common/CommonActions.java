@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -133,6 +134,42 @@ public class CommonActions {
 			Assert.fail();
 		}
 	}
+	
+	public static void inputTextThenClickEnter(WebElement element, String input) {
+		try {
+			element.sendKeys(input, Keys.ENTER);
+			Loggers.logTheTest(input + " <-----> has been put into <-----> " + element + " and then clicked by Enter Key");
+		} catch (NoSuchElementException | NullPointerException e) {
+			e.printStackTrace();
+			Loggers.logTheTest(element + "<----------> has not been found\n" + e.getMessage() );
+			Assert.fail();
+		}
+	}
+	
+	public static void inputTextThenClickReturn(WebElement element, String input) {
+		try {
+			element.sendKeys(input, Keys.RETURN);
+			Loggers.logTheTest(input + " <-----> has been put into <-----> " + element + " and then clicked by Enter Key");
+		} catch (NoSuchElementException | NullPointerException e) {
+			e.printStackTrace();
+			Loggers.logTheTest(element + "<----------> has not been found\n" + e.getMessage() );
+			Assert.fail();
+		}
+	}
+	
+	public static void inputTextThenClickTab(WebElement element, String input) {
+		try {
+			element.sendKeys(input, Keys.TAB);
+			Loggers.logTheTest(input + " <-----> has been put into <-----> " + element + " and then clicked by Enter Key");
+		} catch (NoSuchElementException | NullPointerException e) {
+			e.printStackTrace();
+			Loggers.logTheTest(element + "<----------> has not been found\n" + e.getMessage() );
+			Assert.fail();
+		}
+	}
+	
+	
+	
 	
 	// very very important interview question
 	public static String getSreenShot(String testName, WebDriver driver) {

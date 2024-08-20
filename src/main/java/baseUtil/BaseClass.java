@@ -63,6 +63,8 @@ public class BaseClass {
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(implicitlyWait));
 		initClass();
 	}
+	
+	// TODO: Nasir, explicitly wait should be connected from here
 
 	public void initDriver() {
 		String browserName = configuration.getProperties(BROWSER);
