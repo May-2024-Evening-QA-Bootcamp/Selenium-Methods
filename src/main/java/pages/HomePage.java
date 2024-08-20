@@ -1,11 +1,16 @@
 package pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
 import net.bytebuddy.asm.MemberSubstitution.FieldValue;
@@ -15,10 +20,12 @@ import net.bytebuddy.asm.MemberSubstitution.FieldValue;
 // This is called static import
 import static common.CommonActions.*;
 
+import java.time.Duration;
 import java.util.Set;
 
 public class HomePage {
-	WebDriver driver;
+	public WebDriver driver;
+	public WebDriverWait wait;
 
 	// parameterized constructor initialized when class in instantiated [object created]
 	public HomePage(WebDriver driver) {
@@ -26,6 +33,7 @@ public class HomePage {
 		// PageFactory class help to instantiate WebElements
 		// Important interview question
 		PageFactory.initElements(driver, this);
+		wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 	}
 	
 	@FindBy(xpath = "//em[@id='cms-homepage-header-logo-unauth' and @class='cms-icon cms-sprite-loggedout ms-3' ]")
@@ -415,11 +423,226 @@ public class HomePage {
 		verifyTextOfTheWebElement(helpPageHeader, "CMS Enterprise Portal - Help Center");
 		pause(4000);
 	}
+	
+	// use of Keys.ENTER, most common then [raw code]
+	public void use_of_sendKeys_method_then_click_by_enter_key_of_the_laptop_01 () {
+		pause(4000);
+		driver.findElement(By.id("cms-login-userId")).sendKeys("May 2024", Keys.ENTER);
+		pause(4000);
+	}
+	
+	// use of Keys.ENTER, common method inputTextThenClickEnter() used
+	public void use_of_sendKeys_method_then_click_by_enter_key_of_the_laptop_02 () {
+		pause(4000);
+		elementDisplayed(userId);
+		inputTextThenClickEnter(userId, "May 2024 QA");
+		pause(4000);
+	}
+	
+	// use of Keys.RETURN , common method used
+	public void use_of_sendKeys_method_then_click_by_return_key_of_the_laptop () {
+		elementDisplayed(userId);
+		inputTextThenClickReturn(userId, "enthrall_12");
+		pause(4000);
+		elementDisplayed(password);
+		inputTextThenClickReturn(password, "OnthrallTest@1234"); // Used here
+		pause(4000);
+	}
+	
+	// use of Keys.TAB, common method used
+	public void use_of_sendKeys_method_then_click_by_tab_key_of_the_laptop () {
+		elementDisplayed(userId);
+		inputTextThenClickTab(userId, "enthrall_12");  // the focus will go to next input
+		pause(4000);
+	}
+	
+	// use of navigate()
+	// mostly interview question, never used in framework or in real time environment
+	public void use_of_navigate_method () {
+		pause(4000);
+		driver.navigate().to("https://www.ebay.com");
+		pause(4000);
+		driver.navigate().back();
+		pause(4000);
+		driver.navigate().forward();
+		pause(4000);
+		driver.navigate().refresh();
+		pause(4000);
+	}
+	
+	// Very very important interview question
+	public void use_of_mouse_hoverAction_on_ourLocations () {
+		pause(4000);
+		// below process we don't use in framework
+		driver.navigate().to("https://www.mountsinai.org/");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20)); 
+		// use of normalize-space(text()) as an xpath is new here, please have a look
+		WebElement ourLocations = driver.findElement(By.xpath("//a[normalize-space(text()) = 'Our Locations' and @class='hidden-xs dropdown']")); 
+		Actions actions = new Actions(driver);
+		actions.moveToElement(ourLocations).build().perform();
+		pause(5000);		
+	}
+	
+	// alternate of click()
+	// very very  Important interview question + they ask you to write the code in MS word
+	// JavaScriptExecutor is an Interface that helps to execute JavaScript through Selenium Webdriver. 
+	// so, practice it by paper pen, then in ms word
+	// when you see error message "click intercepted" or "ElementNotInteractableException", you use it
+	// login button used
+	public void alternate_of_click_method() {
+		// WebElement loginButton = driver.findElement(By.id("cms-login-submit"));
+		// above line, we used it at the beginning, no need to show it here
+		JavascriptExecutor js = (JavascriptExecutor)driver;
+		js.executeScript("arguments[0].click()", loginButton); // memorize the content
+		// arguments[0] means, find the web element of index 0, means first occurrence
+		pause(4000);
+	}
+	
+	// interview question
+	// how to input text inside a field by JavascriptExecutor, alternate of sendKeys()
+	// user id field is used to input text
+	public void alternate_of_send_keys_method() {
+		pause(4000);
+		JavascriptExecutor js = (JavascriptExecutor)driver;
+		js.executeScript("arguments[0].value='enthrall_12'", userId);
+		pause(4000);		
+	}	
+	
+	// TODO: Fail, why?
+	// login process by JavascriptExecutor
+	// alternative of click(), sendKeys() is used
+	public void login_process_by_JavascriptExecutor(){
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		elementDisplayed(userId);		
+		js.executeScript("arguments[0].value = 'enthrall_12' ", userId);
+		pause(3000);
+		elementDisplayed(password);
+		js.executeScript("arguments[0].value = 'OnthrallTest@1234' ", password);
+		pause(3000);
+		elementSelected(termsAndCondition);
+		js.executeScript("arguments[0].click()", termsAndCondition);
+		pause(3000);
+		elementEnabled(loginButton);
+		verifyTextOfTheWebElement(loginButton, "Login");
+		js.executeScript("arguments[0].click()", loginButton);
+		pause(3000);
+	}
 
+	// it will fail, because selenium can't handle hidden element
+	public void how_to_handle_hidden_element_by_regular_selenium_method() {
+		pause(3);
+		driver.navigate().to("https://www.letskodeit.com/practice");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+		pause(3000);
+		// identify the 'Hide' element and click on it [line 548]
+		// The search field will be disappeared, but we can pass value on it, as we got the info before
+		driver.findElement(By.id("hide-textbox")).click();
+		pause(4000);
+		// identify element and set/input text or value (line 540) by selenium
+		driver.findElement(By.xpath("//input[@id='displayed-text']")).sendKeys("Hello");
+		// it will fail by below error message
+		// org.openqa.selenium.ElementNotInteractableException: element not interactable
+		// whenever you find element not interactable in console, that is for sure a hidden element	
+	}
 	
+	// it will pass
+	public void how_to_handle_hidden_element_by_javascriptExecutor() {
+		pause(3000);
+		driver.navigate().to("https://www.letskodeit.com/practice");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+		pause(3000);
+		// identify the 'Hide' element and click on it [line 548]
+		// The search field will be disappeared, but we can pass value on it, as we got the info before
+		// we can click by regular selenium method like 520
+		WebElement hide = driver.findElement(By.id("hide-textbox"));
+		JavascriptExecutor js = (JavascriptExecutor)driver;
+		js.executeScript("arguments[0].click()", hide); // clicking on hide button is not necessary by JS
+		pause(3000);
+		// identify element and set/input text or value (line 540) by selenium
+		// identify element and set/input text or value by JavascriptExecutor
+		WebElement searchField = driver.findElement(By.xpath("//input[@id='displayed-text']"));
+		js.executeScript("arguments[0].value='Hello'", searchField);
+		pause(3000);
+		
+		// save below code for getTitle, getTest, Refresh by JavscriptExecutor
+		// You can really know what was the text written by the JavascriptExecutor		
+		// Not important and not related below
+		// Extra code, alternative of  getText() 
+		// Extra not related to hidden elements and not important
+		// To find out what you send as text, not necessary for this scenario
+		// Just save the below code for future reference
+		String s = (String) js.executeScript("return document.getElementById('displayed-text').value");
+		System.out.print("Value entered in hidden field: " + s + "\n");
+		
+		// Not important
+		// How to get title of the page by JavaScript
+		// How to read a JavaScript variable in Selenium WebDriver?
+		// How to getTitle by Javascript, 
+		String sText = js.executeScript("return document.title;").toString(); // fetching page title by javascript
+		System.out.println("The title of the Page is: "+sText);	
+		
+		// Not related with this test
+		// How to refresh by Javascript, 
+		js.executeScript("history.go(0)"); // To do refresh by Javascript
+		
+	}
 	
+	// very very important
+	// when the web element always failed in test, use explicitly wait, 
+	// this web site doesn't have complex elements
+	// "login" web element 
+	// using visibilityOfElementLocated() method , Number one
+	// This is a very common scenario in industry to use explicitly wait
+	public void use_of_explicitly_wait_01() {
+		pause(3000);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@id= 'cms-login-submit']"))).click();
+		pause(3000);
+	}
 	
+	// New User Registration webElement
+	// using elementToBeClickable() method, number two
+	public void use_of_explicitly_wait_02(){
+		pause(3000);
+		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[contains(text(), 'New')]"))).click();
+		pause(4000);
+	}
 	
+	// userId webElement
+	// using visibilityOf() method, number three
+	public void use_of_explicitly_wait_03(){
+		pause(3000);
+		wait.until(ExpectedConditions.visibilityOf(userId)).isDisplayed(); // here userId is webElement type
+		inputText(userId, "enthrall_12");
+		pause(3000);
+	}
+	
+	// Try to remember this above 3 conditions-name for interview, most time they asked it
+	
+	// Not important, you can use it to practice
+	// "unlock" web element 
+	// using presenceOfElementLocated() method
+	public void use_of_explicitly_wait_04(){
+		pause(3);
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[contains(text(), 'Password')]"))).click();
+		pause(4);
+	}
+	
+	// Not important, you can use it to practice
+	// "Login Button" web element
+	// using textToBePresentInElement() method
+	// this is not a clickable method, just to recognize the web element
+	public void use_of_explicitly_wait_05(){
+		pause(3);
+		boolean outcome = wait.until(ExpectedConditions.textToBePresentInElement(loginButton, "Login"));
+		System.out.println(outcome);
+		pause(4);
+	}
+
+
+
 	
 	
 	
