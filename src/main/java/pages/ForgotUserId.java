@@ -97,9 +97,13 @@ public class ForgotUserId {
 	}
 	
 	public void verifyForgotUserId() {
+		validationOfHeader(forgotUserIdHeader, "Forgot User ID");
+		validationOfSubHeader(forgotUserIdSubHeader, "Please enter the following information to retrieve your User ID.");
+		validationOfOtherHeader(allFieldsRequired, "All fields are required.");
 		inputText(firstName, "Mohammad");
 		pause(4000);
 		inputText(lastName, "Sharkar");
+		selectElelementFromDropdownOnebyOne(birthMonth, birthMonthList);
 		selectDropdown(birthMonth, "June");
 		pause(4000);
 		selectDropdown(birthDate, "8");

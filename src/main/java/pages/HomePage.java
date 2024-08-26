@@ -13,12 +13,13 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
-import net.bytebuddy.asm.MemberSubstitution.FieldValue;
+import constants.Attribute;
 
 // new, you have to manually write it to get access of common actions
 // this is possible when they are static in nature, * means all
 // This is called static import
 import static common.CommonActions.*;
+import static common.CommonWaits.*;
 
 import java.time.Duration;
 import java.util.Set;
@@ -375,18 +376,8 @@ public class HomePage {
 		verifyCurrentUrl(driver, "https://portal.cms.gov/portal/newuserregistration");
 	}
 	
-	// Here We used User ID field
-	// getAttribute() actually give the value of the Attribute, not common
-	// raw use, in next method we will use from common action
-	public void use_of_getAttribute_method () {
-		elementSelected(userId);
-		pause(3000);
-		String ml = userId.getAttribute("maxlength");
-		System.out.println("The value of the maxlength attribute is: " + ml);
-		String ph = userId.getAttribute("placeholder");
-		System.out.println("The value of the placeholder attribute is: " + ph);
-	}
-	
+	// getAttribute() will teach later
+		
 	// use of clear()
 	public void use_of_clear_in_login() {
 		elementDisplayed(userId);
@@ -509,7 +500,7 @@ public class HomePage {
 		pause(4000);		
 	}	
 	
-	// TODO: Fail, why?
+	// TODO: Nasir Fail, why?
 	// login process by JavascriptExecutor
 	// alternative of click(), sendKeys() is used
 	public void login_process_by_JavascriptExecutor(){
@@ -529,6 +520,24 @@ public class HomePage {
 		pause(3000);
 	}
 
+	// TODO: Fail, why?
+	// login process by JavascriptExecutor common method
+	public void login_process_by_JavascriptExecutor_common_method(){
+		elementDisplayed(userId);	
+		inputTextUsingJavascriptExecutor(driver, "arguments[0].value = 'enthrall_12' ", userId);
+		pause(3000);
+		elementDisplayed(password);
+		inputTextUsingJavascriptExecutor(driver, "arguments[0].value = 'OnthrallTest@1234' ", password);
+		pause(3000);
+		elementSelected(termsAndCondition);
+		clickUsingJavascriptExecutor(driver, "arguments[0].click()", termsAndCondition);
+		pause(3000);
+		elementEnabled(loginButton);
+		verifyTextOfTheWebElement(loginButton, "Login");
+		clickUsingJavascriptExecutor(driver, "arguments[0].click()", loginButton);
+		pause(3000);
+	}
+	
 	// it will fail, because selenium can't handle hidden element
 	public void how_to_handle_hidden_element_by_regular_selenium_method() {
 		pause(3);
@@ -639,6 +648,34 @@ public class HomePage {
 		boolean outcome = wait.until(ExpectedConditions.textToBePresentInElement(loginButton, "Login"));
 		System.out.println(outcome);
 		pause(4);
+	}
+	
+	// New User Registration webElement
+	// using commonWaits fir elementToBeClickable() method
+	public void use_of_explicitly_wait_from_common_waits(){
+		pause(4000);
+		waitUntilConditionThenClick(driver, newUserRegistration);
+		pause(3000);
+	}
+	
+	// Here We used User ID field
+	// getAttribute() actually give the value of the Attribute, not common
+	// raw use, in next method we will use from common action
+	public void use_of_getAttribute_method () {
+		elementSelected(userId);
+		pause(3000);
+		String ml = userId.getAttribute("maxlength");
+		System.out.println("The value of the maxlength attribute is: " + ml);
+		String ph = userId.getAttribute("placeholder");
+		System.out.println("The value of the placeholder attribute is: " + ph);
+	}
+	
+	public void use_of_getAttribute_by_common_method () {
+		elementSelected(userId);
+		getAttributeValue(userId, Attribute.MAX_LENGTH);
+		pause(3000);
+		getAttributeValue(userId, Attribute.PLACEHOLDER);
+		pause(3000);
 	}
 
 

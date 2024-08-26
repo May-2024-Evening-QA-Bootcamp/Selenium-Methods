@@ -2,14 +2,21 @@ package pagesTest;
 
 
 import static common.CommonActions.clickElement;
+import static common.CommonActions.clickUsingJavascriptExecutor;
 import static common.CommonActions.elementDisplayed;
+import static common.CommonActions.elementEnabled;
+import static common.CommonActions.elementSelected;
+import static common.CommonActions.getAttributeValue;
+import static common.CommonActions.inputTextUsingJavascriptExecutor;
 import static common.CommonActions.pause;
 import static common.CommonActions.verifyTextOfTheWebElement;
+import static common.CommonWaits.waitUntilConditionThenClick;
 
 import java.util.Set;
 
 import org.testng.annotations.Test;
 import baseUtil.BaseClass;
+import constants.Attribute;
 
 public class HomePageTest extends BaseClass {
 	
@@ -167,11 +174,6 @@ public class HomePageTest extends BaseClass {
 		homePage.newUserRegistrationPageValidation();
 	}
 	
-	@Test
-	public void use_of_getAttribute_method_Test () {
-		homePage.use_of_getAttribute_method();
-	}
-	
 	@Test (enabled = true, priority = 3)
 	public void use_of_clear_in_login_test() {
 		homePage.use_of_clear_in_login();
@@ -227,6 +229,11 @@ public class HomePageTest extends BaseClass {
 		homePage.login_process_by_JavascriptExecutor();
 	}
 	
+	@Test
+	public void login_process_by_JavascriptExecutor_common_method_test(){
+		homePage.login_process_by_JavascriptExecutor_common_method();
+	}
+	
 	// it will fail
 	@Test()
 	public void how_to_handle_hidden_element_by_regular_selenium_method_test() {
@@ -262,6 +269,30 @@ public class HomePageTest extends BaseClass {
 	public void use_of_explicitly_wait_05_test(){
 		homePage.use_of_explicitly_wait_05();
 	}
+	
+	@Test
+	public void use_of_explicitly_wait_from_common_waits_test(){
+		homePage.use_of_explicitly_wait_from_common_waits();
+	}
+	
+	@Test
+	public void use_of_getAttribute_method_Test () {
+		homePage.use_of_getAttribute_method();
+	}
+	
+	@Test
+	public void use_of_getAttribute_by_common_method_test () {
+		homePage.use_of_getAttribute_by_common_method();
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	/*
 	

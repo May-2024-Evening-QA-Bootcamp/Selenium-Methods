@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
@@ -17,6 +19,7 @@ import org.testng.Assert;
 
 import com.google.common.io.Files;
 
+import constants.Attribute;
 import reports.Loggers;
 
 public class CommonActions {
@@ -123,6 +126,62 @@ public class CommonActions {
 		}
 	}
 	
+	public static void validationOfHeader(WebElement element, String expectedHeader) {
+		try {
+			String actualHeader = element.getText();
+			Loggers.logTheTest(element + " ---> Actual Header : " + actualHeader + ". Expected Header : " + expectedHeader);
+			Assert.assertEquals(actualHeader, expectedHeader, "Header doesn't match");
+		} catch (NullPointerException | NoSuchElementException e) {
+			e.printStackTrace();
+			Loggers.logTheTest(element + " : This element Not Found");
+			Assert.fail();
+		}
+
+	}
+	
+	public static void validationOfSubHeader(WebElement element, String expectedSubHeader) {
+		try {
+			String actualSubHeader = element.getText();
+			Loggers.logTheTest(element + " ---> Actual SubHeader : " + actualSubHeader + ". Expected SubHeader : " + expectedSubHeader);
+			Assert.assertEquals(actualSubHeader, expectedSubHeader, "SubHeader doesn't match");
+		} catch (NullPointerException | NoSuchElementException e) {
+			e.printStackTrace();
+			Loggers.logTheTest(element + " : This element Not Found");
+			Assert.fail();
+		}
+	
+	}
+	
+	public static void validationOfOtherHeader(WebElement element, String expectedOtherHeader) {
+		try {
+			String actualOtherHeader = element.getText();
+			Loggers.logTheTest(element + " ---> Actual Other Header : " + actualOtherHeader + ". Expected Other Header : "
+					+ expectedOtherHeader);
+			Assert.assertEquals(actualOtherHeader, expectedOtherHeader, "Other Header doesn't match");
+		} catch (NullPointerException | NoSuchElementException e) {
+			e.printStackTrace();
+			Loggers.logTheTest(element + " : This element Not Found");
+			Assert.fail();
+		}
+
+	}	
+	
+	public static void selectElelementFromDropdownOnebyOne(WebElement element, List<WebElement> elements) {
+		try {
+			Select select = new Select(element);
+			for(int i=1; i<elements.size(); i++) {
+				Loggers.logTheTest(elements.get(i).getText() + " is present in the dropdpwn");
+				select.selectByIndex(i);
+				pause(2000);
+			}
+			Loggers.logTheTest("Total Element: " + (elements.size() - 1) + " is present in the dropdown");
+		} catch (NullPointerException | NoSuchElementException e) {
+			e.printStackTrace();
+			Loggers.logTheTest(element + " : This element Not Found");
+			Assert.fail();
+		}
+	}
+	
 	public static void selectDropdown(WebElement element, String value) {
 		try {
 			Select select = new Select(element);
@@ -168,8 +227,69 @@ public class CommonActions {
 		}
 	}
 	
+	public static void clickUsingJavascriptExecutor(WebDriver driver, String script, WebElement element) {
+		// JavascriptExecutor js = (JavascriptExecutor)driver; // instead of writing this 'js' object
+		// we can write below one
+		((JavascriptExecutor) driver).executeScript(script, element);
+		Loggers.logTheTest("JavascriptExecutor executing ..." + script + " to click on element ---> " + element);
+	}	
+	
+	public static void inputTextUsingJavascriptExecutor(WebDriver driver, String script, WebElement element) {
+		((JavascriptExecutor) driver).executeScript(script, element);
+		Loggers.logTheTest("JavascriptExecutor executing ..." + script + " to input Text on element ---> " + element);
+	}	
 	
 	
+	// Attribute is coming from package constants, we will check the outcome later
+	// Why String type see next method
+	public static String getAttributeValue(WebElement element, Attribute attribute) {
+		try {
+			String atr = attribute.getTheAttribute();
+			String value = element.getAttribute(atr);
+			Loggers.logTheTest("Value for the attribute \"" + attribute + "\" in the WebElement " + element + " is executed and receive --> " + value);
+		} catch (NoSuchElementException | NullPointerException e) {
+			e.printStackTrace();
+			Loggers.logTheTest(element + "<----------> has not been found\n" + e.getMessage() );
+			Assert.fail();
+		}
+		return null;		
+	}
+	
+	public static void verifyLengthOfTheFieldContent (WebElement element, Attribute attribute, String expectedLength) {
+		try {
+			String actualLength = getAttributeValue(element, attribute);
+			Loggers.logTheTest("The field " + element + " ---> has Actual Length : " + actualLength + "and Expected Length : " + expectedLength);
+			Assert.assertEquals(actualLength, expectedLength, "Length doesn't match");
+		} catch (NoSuchElementException | NullPointerException e) {
+			e.printStackTrace();
+			Loggers.logTheTest(element + "<----------> has not been found\n" + e.getMessage() );
+			Assert.fail();
+		}
+	}
+	
+	public static void verifyErrorMessageUnderTheField (WebElement element, Attribute attribute, String expectedErrorMessage) {
+		try {
+			String actualErrorMessage = getAttributeValue(element, attribute);
+			Loggers.logTheTest("The Web Element " + element + " ---> has Actual Error Message : " + actualErrorMessage + "and Expected Error Message : " + expectedErrorMessage);
+			Assert.assertEquals(actualErrorMessage, expectedErrorMessage, "Error Message doesn't match");
+		} catch (NoSuchElementException | NullPointerException e) {
+			e.printStackTrace();
+			Loggers.logTheTest(element + "<----------> has not been found\n" + e.getMessage() );
+			Assert.fail();
+		}
+	}
+	
+	public static void verifyErrorMessageTopOfThePage (WebElement element, Attribute attribute, String expectedErrorMessage) {
+		try {
+			String actualErrorMessage = getAttributeValue(element, attribute) + " is a required field.";
+			Loggers.logTheTest("The Web Element " + element + " ---> has Actual Error Message : " + actualErrorMessage + "and Expected Error Message : " + expectedErrorMessage);
+			Assert.assertEquals(actualErrorMessage, expectedErrorMessage, "Error Message doesn't match");
+		} catch (NoSuchElementException | NullPointerException e) {
+			e.printStackTrace();
+			Loggers.logTheTest(element + "<----------> has not been found\n" + e.getMessage() );
+			Assert.fail();
+		}
+	}
 	
 	// very very important interview question
 	public static String getSreenShot(String testName, WebDriver driver) {
