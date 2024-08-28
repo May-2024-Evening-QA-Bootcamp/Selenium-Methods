@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
@@ -227,19 +228,23 @@ public class CommonActions {
 		}
 	}
 	
-	public static void clickUsingJavascriptExecutor(WebDriver driver, String script, WebElement element) {
+	public static void clickUsingJavascriptExecutor(WebDriver driver, WebElement element) {
 		// JavascriptExecutor js = (JavascriptExecutor)driver; // instead of writing this 'js' object
 		// we can write below one
-		((JavascriptExecutor) driver).executeScript(script, element);
-		Loggers.logTheTest("JavascriptExecutor executing ..." + script + " to click on element ---> " + element);
+		((JavascriptExecutor) driver).executeScript("arguments[0].click()", element);
+		Loggers.logTheTest("JavascriptExecutor executing ..." + " arguments[0].click()" + " to click on element ---> " + element);
 	}	
 	
 	public static void inputTextUsingJavascriptExecutor(WebDriver driver, String script, WebElement element) {
 		((JavascriptExecutor) driver).executeScript(script, element);
 		Loggers.logTheTest("JavascriptExecutor executing ..." + script + " to input Text on element ---> " + element);
+	}
+	
+	public static void scrollIntoViewTheElementUsingJavascriptExecutor(WebDriver driver, WebElement element) {
+		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true)", element);
+		Loggers.logTheTest("JavascriptExecutor executing ..." + " arguments[0].scrollIntoView(true)" + " to input Text on element ---> " + element);
 	}	
-	
-	
+		
 	// Attribute is coming from package constants, we will check the outcome later
 	// Why String type see next method
 	public static String getAttributeValue(WebElement element, Attribute attribute) {
@@ -290,6 +295,24 @@ public class CommonActions {
 			Assert.fail();
 		}
 	}
+	
+	public static void switchToChildWindow(WebDriver driver, WebElement element) {
+		try {
+			clickElement(element);
+			Set<String> allWindowHandles = driver.getWindowHandles();
+			Loggers.logTheTest("Total Windows Opened: " + allWindowHandles.size());
+			// Extract Parent and child window from all window handles
+			String parent = (String) allWindowHandles.toArray()[0];
+			String child = (String) allWindowHandles.toArray()[1];
+			driver.switchTo().window(child);
+			Loggers.logTheTest(" The Window moved to --> " + child);
+		} catch (NoSuchElementException | NullPointerException e) {
+			e.printStackTrace();
+			Loggers.logTheTest(element + "<----------> has not been found\n" + e.getMessage());
+			Assert.fail();
+		}
+	}
+	
 	
 	// very very important interview question
 	public static String getSreenShot(String testName, WebDriver driver) {

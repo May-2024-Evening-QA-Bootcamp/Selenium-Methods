@@ -1,5 +1,6 @@
 package pages;
 
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
@@ -12,6 +13,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.w3c.dom.ls.LSException;
 
 import constants.Attribute;
 
@@ -21,12 +23,17 @@ import constants.Attribute;
 import static common.CommonActions.*;
 import static common.CommonWaits.*;
 
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
 import java.time.Duration;
 import java.util.Set;
 
 public class HomePage {
 	public WebDriver driver;
 	public WebDriverWait wait;
+	JavascriptExecutor js;
+	Actions actions;
 
 	// parameterized constructor initialized when class in instantiated [object created]
 	public HomePage(WebDriver driver) {
@@ -35,6 +42,9 @@ public class HomePage {
 		// Important interview question
 		PageFactory.initElements(driver, this);
 		wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+		js = (JavascriptExecutor)driver;
+		actions = new Actions(driver);
+		
 	}
 	
 	@FindBy(xpath = "//em[@id='cms-homepage-header-logo-unauth' and @class='cms-icon cms-sprite-loggedout ms-3' ]")
@@ -470,7 +480,7 @@ public class HomePage {
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20)); 
 		// use of normalize-space(text()) as an xpath is new here, please have a look
 		WebElement ourLocations = driver.findElement(By.xpath("//a[normalize-space(text()) = 'Our Locations' and @class='hidden-xs dropdown']")); 
-		Actions actions = new Actions(driver);
+		// Actions actions = new Actions(driver);
 		actions.moveToElement(ourLocations).build().perform();
 		pause(5000);		
 	}
@@ -484,7 +494,7 @@ public class HomePage {
 	public void alternate_of_click_method() {
 		// WebElement loginButton = driver.findElement(By.id("cms-login-submit"));
 		// above line, we used it at the beginning, no need to show it here
-		JavascriptExecutor js = (JavascriptExecutor)driver;
+		// JavascriptExecutor js = (JavascriptExecutor)driver;
 		js.executeScript("arguments[0].click()", loginButton); // memorize the content
 		// arguments[0] means, find the web element of index 0, means first occurrence
 		pause(4000);
@@ -495,7 +505,7 @@ public class HomePage {
 	// user id field is used to input text
 	public void alternate_of_send_keys_method() {
 		pause(4000);
-		JavascriptExecutor js = (JavascriptExecutor)driver;
+		// JavascriptExecutor js = (JavascriptExecutor)driver;
 		js.executeScript("arguments[0].value='enthrall_12'", userId);
 		pause(4000);		
 	}	
@@ -504,7 +514,7 @@ public class HomePage {
 	// login process by JavascriptExecutor
 	// alternative of click(), sendKeys() is used
 	public void login_process_by_JavascriptExecutor(){
-		JavascriptExecutor js = (JavascriptExecutor) driver;
+		// JavascriptExecutor js = (JavascriptExecutor) driver;
 		elementDisplayed(userId);		
 		js.executeScript("arguments[0].value = 'enthrall_12' ", userId);
 		pause(3000);
@@ -530,11 +540,11 @@ public class HomePage {
 		inputTextUsingJavascriptExecutor(driver, "arguments[0].value = 'OnthrallTest@1234' ", password);
 		pause(3000);
 		elementSelected(termsAndCondition);
-		clickUsingJavascriptExecutor(driver, "arguments[0].click()", termsAndCondition);
+		clickUsingJavascriptExecutor(driver, termsAndCondition);
 		pause(3000);
 		elementEnabled(loginButton);
 		verifyTextOfTheWebElement(loginButton, "Login");
-		clickUsingJavascriptExecutor(driver, "arguments[0].click()", loginButton);
+		clickUsingJavascriptExecutor(driver, loginButton);
 		pause(3000);
 	}
 	
@@ -567,7 +577,7 @@ public class HomePage {
 		// The search field will be disappeared, but we can pass value on it, as we got the info before
 		// we can click by regular selenium method like 520
 		WebElement hide = driver.findElement(By.id("hide-textbox"));
-		JavascriptExecutor js = (JavascriptExecutor)driver;
+		// JavascriptExecutor js = (JavascriptExecutor)driver;
 		js.executeScript("arguments[0].click()", hide); // clicking on hide button is not necessary by JS
 		pause(3000);
 		// identify element and set/input text or value (line 540) by selenium
@@ -677,12 +687,180 @@ public class HomePage {
 		getAttributeValue(userId, Attribute.PLACEHOLDER);
 		pause(3000);
 	}
+	
+	// important interview question
+	// 1st way: Scroll by Actions class
+	// scroll bottom and then top
+	public void use_of_scroll_down_and_up_by_actions_class () {
+		pause(3000);
+		// for Scroll Down using Actions class, to go at the bottom of the page
+		actions.keyDown(Keys.CONTROL).sendKeys(Keys.END).perform();
+		pause(3000);
+		// for Scroll Up using Actions class at the top of the page
+		actions.keyDown(Keys.CONTROL).sendKeys(Keys.HOME).perform();
+		pause(3000);
+		// instead of END and HOME, we can use Keys.UP or Keys.Down
+		// But it doesn't change much but the test case passes, we will not use them		
+	}
+	
+	// not important, just to know
+	public void use_of_scroll_down_and_scroll_up_by_robot_class () throws InterruptedException, AWTException {
+		// For some reason, they are not going completely Up or Down
+		Robot robot = new Robot();
+		// Scroll Down using Robot class
+		robot.keyPress(KeyEvent.VK_PAGE_DOWN); // Constant for the PAGE_DOWN virtual key.
+		robot.keyRelease(KeyEvent.VK_PAGE_DOWN);
+		pause(3000);
+		// Scroll Up using Robot class
+        robot.keyPress(KeyEvent.VK_PAGE_UP); // Constant for the PAGE_UP virtual key. 
+        robot.keyRelease(KeyEvent.VK_PAGE_UP);
+        pause(3000);		
+	}
+	
+	// important interview question
+	// 2nd way: Scroll by javascriptExecutor
+	// scroll in a certain position (not at the bottom or up)
+	public void use_of_scroll_down_and_up_In_A_Certain_Pixel_by_javascriptExecutor () {
+		pause(3000);
+		// This will scroll down the page by 1000 pixel vertically
+		// here 0 is x axis [horizontal], 1000 y axis [vertical]
+		// you choose your pixel accordingly to reach to that web element
+		js.executeScript("window.scrollBy(0, 1000)", "");
+		// You can change the value to any pixel, and put your own to see the web element you wanna test
+		pause(3000);
+		js.executeScript("window.scrollBy(0, -1000)", ""); // scroll up till 1000px, but not necessary based on your test
+		// minus when it goes opposite of down
+		pause(3000);
+	}
+		
+	
+	// scroll Into View The Element
+	// This is very very important, standard interview question
+	// This is better to use
+	public void scroll_into_view_the_element() {
+		WebElement enterprisePortal = driver.findElement(By.xpath("//h1[text()='Enterprise Portal']"));
+		WebElement learnMore = driver.findElement(By.xpath("//a[contains(text(), 'Lear')]"));
+		js.executeScript("arguments[0].scrollIntoView(true)", enterprisePortal);
+		pause(3000);
+		js.executeScript("arguments[0].click()", learnMore);	
+		pause(3000);
+	}
+	
+	public void scroll_into_view_the_element_by_commonActions() {
+		WebElement enterprisePortal = driver.findElement(By.xpath("//h1[text()='Enterprise Portal']"));
+		WebElement learnMore = driver.findElement(By.xpath("//a[contains(text(), 'Lear')]"));
+		scrollIntoViewTheElementUsingJavascriptExecutor(driver, learnMore);
+		pause(3000);
+		clickUsingJavascriptExecutor(driver, enterprisePortal);
+		pause(3000);
+	}
+	
+	// very very important for interview
+	public void web_based_alert_accept () {
+		pause(4);
+		driver.get("http://softwaretestingplace.blogspot.com/2017/03/javascript-alert-test-page.html");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		driver.findElement(By.xpath("//button[contains(text(), 'Try it')]")).click();
+		pause(4);
+		Alert alert = driver.switchTo().alert();
+		pause(3000);
+		System.out.println("The text present in the alert is: " + alert.getText());
+		alert.accept(); // will click on OK button
+		pause(3000);
+		// line 768, not part of the accept function, 
+		// we just added to know about, the text is present in the alert or not,
+		// also if you use it after 769, it might not retrieve the text		
+
+	}
+	
+	// very very important for interview
+	public void web_based_alert_dismiss () {
+		pause(4);
+		driver.get("http://softwaretestingplace.blogspot.com/2017/03/javascript-alert-test-page.html");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		driver.findElement(By.xpath("//button[contains(text(), 'Try it')]")).click();
+		pause(4);
+		Alert alert = driver.switchTo().alert();
+		pause(3000);
+		System.out.println("The text present in the alert is: " + alert.getText());
+		alert.dismiss(); // will click on Cancel button
+		pause(3000);
+	}
+	
+	// Only important for interview
+	public void authentication_pop_up (){
+		pause(3000);	
+		String userName = "admin";
+		String password = "admin";
+		// original one is: "https://the-internet.herokuapp.com/basic_auth";
+		// Updated one is: "https://admin:admin@the-internet.herokuapp.com/basic_auth";
+		String url = "https://" + userName + ":" + password + "@" + "the-internet.herokuapp.com/basic_auth";
+		driver.get(url);
+		pause(3000);
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		pause(3000);
+		
+		// The below part is not part of this test
+		// identify and get text after authentication of pop up
+		String t = driver.findElement(By.tagName("p")).getText(); // we use tag name as a locator in our course
+		System.out.println("The Text is: " + t);
+		Assert.assertEquals(t, "Congratulations! You must have the proper credentials.");
+	}
+	
+	// only important for interview
+	public void use_of_right_click_action() {
+		pause(3000);
+		driver.get("https://demo.guru99.com/test/simple_context_menu.html");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		WebElement rcButton = driver.findElement(By.xpath("//span[contains(text(), 'right click me')]"));
+		actions.moveToElement(rcButton).contextClick().build().perform(); // right click action
+		pause(3000);
+		
+		// From Line 827, not part of testing, just completed the scenario
+		// Just keep below code, Can't find the web element for Edit at present, the line 775 is from my collection.
+		// Below 2 is not relevant to right click, just doing some extra, which we know already
+		// Next: I want to click on Edit link on the displayed menu options
+		WebElement edit = driver.findElement(By.xpath("//span[text()='Edit']"));
+		pause(3000);
+		edit.click(); // a regular click, not a right click
+		pause(3000);
+		// Switch to the alert box and click on OK button
+		Alert alert = driver.switchTo().alert();
+		System.out.println("\nAlert Text: " + alert.getText());
+		alert.accept();
+		pause(3000);	
+		
+	}
+	
+	// only important for interview
+	public void use_of_double_click_action() {
+		pause(3000);
+		driver.get("https://demo.guru99.com/test/simple_context_menu.html");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		pause(3000);
+		WebElement dcButton = driver.findElement(By.xpath("//button[text()='Double-Click Me To See Alert']"));
+		actions.doubleClick(dcButton).build().perform();
+		pause(3000);
+		// Not part of the double click action
+		// Switch to the alert box and click on OK button
+		Alert alert = driver.switchTo().alert();
+		System.out.println("\nAlert Text: " + alert.getText());
+		alert.accept();
+		pause(3000);		
+	}
 
 
 
-	
-	
-	
+
+
+
+
+
 	
 	
 	
