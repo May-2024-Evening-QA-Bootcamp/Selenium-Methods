@@ -9,11 +9,15 @@ import static common.CommonActions.elementSelected;
 import static common.CommonActions.getAttributeValue;
 import static common.CommonActions.inputTextUsingJavascriptExecutor;
 import static common.CommonActions.pause;
+import static common.CommonActions.scrollIntoViewTheElementUsingJavascriptExecutor;
 import static common.CommonActions.verifyTextOfTheWebElement;
 import static common.CommonWaits.waitUntilConditionThenClick;
 
+import java.awt.AWTException;
 import java.util.Set;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 import baseUtil.BaseClass;
 import constants.Attribute;
@@ -285,12 +289,55 @@ public class HomePageTest extends BaseClass {
 		homePage.use_of_getAttribute_by_common_method();
 	}
 	
+	@Test
+	public void use_of_scroll_down_and_up_by_actions_class_Test () {
+		homePage.use_of_scroll_down_and_up_by_actions_class();
+	}
 	
+	@Test
+	public void use_of_scroll_down_and_scroll_up_by_robot_class () throws InterruptedException, AWTException {
+		homePage.use_of_scroll_down_and_scroll_up_by_robot_class ();
+	}
 	
+	@Test
+	public void use_of_scroll_down_and_up_by_javascriptExecutor_test () {
+		homePage.use_of_scroll_down_and_up_In_A_Certain_Pixel_by_javascriptExecutor ();
+	}
 	
+	@Test
+	public void scroll_into_view_the_element_test() {
+		homePage.scroll_into_view_the_element();
+	}
 	
+	@Test
+	public void scroll_into_view_the_element_by_commonActions_test() {
+		homePage.scroll_into_view_the_element_by_commonActions();
+	}
 	
+	@Test
+	public void web_based_alert_accept_test () {
+		homePage.web_based_alert_accept();		
+	}
 	
+	@Test
+	public void web_based_alert_dismiss_test () {
+		homePage.web_based_alert_dismiss();		
+	}
+	
+	@Test
+	public void  authentication_pop_up_test () throws InterruptedException {
+		homePage. authentication_pop_up ();
+	}
+	
+	@Test()
+	public void use_of_right_click_action_test () {
+		homePage.use_of_right_click_action ();
+	}
+
+	@Test()
+	public void use_of_double_click_action_test () throws InterruptedException {
+		homePage.use_of_double_click_action ();
+	}
 	
 	
 	
@@ -298,6 +345,50 @@ public class HomePageTest extends BaseClass {
 	
 	
 	
+	
+	
+	
+	
+		
+	
+	
+	
+	
+	
+	
+	
+
+	
+		
+	@Test(enabled = false)
+	public void use_of_drag_and_drop_action_test () throws InterruptedException {
+		homePage.use_of_drag_and_drop_action ();
+	}
+	
+	@Test(enabled = false)
+	public void use_of_slider_action_test () {
+		homePage.use_of_slider_action ();
+	}
+	
+	@Test(enabled = false)
+	public void use_of_slider_action_alternate_test () {
+		homePage.use_of_slider_action_alternate ();
+	}
+	
+	@Test(enabled = false)
+	public void read_table_test () {
+		homePage.read_table ();
+	}
+	
+	@Test(enabled = false)
+	public void read_any_row_of_the_table_test ()  {
+		homePage.read_any_row_of_the_table ();
+	}
+	
+	@Test(enabled = false)
+	public void read_any_cell_of_a_row_of_the_table () {
+		homePage.read_any_cell_of_a_row_of_the_table ();
+	}
 	
 	
 	
