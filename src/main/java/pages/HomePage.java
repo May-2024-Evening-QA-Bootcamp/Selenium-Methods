@@ -13,6 +13,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.SkipException;
 import org.w3c.dom.ls.LSException;
 
 import constants.Attribute;
@@ -853,18 +854,196 @@ public class HomePage {
 		alert.accept();
 		pause(3000);		
 	}
-
-
-
-
-
-
-
-
 	
+	// not important
+	public void use_of_drag_and_drop_action () {
+		pause(3000);
+		driver.get("https://demo.guru99.com/test/drag_drop.html");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		// WebElement which needs to drag (Bank Button)
+		WebElement sourceLocator = driver.findElement(By.xpath("//a[contains(text(), 'BA')]")); 
+		// Element where need to be dropped.(In 'Account' field of debit side)
+		WebElement targetLocator = driver.findElement(By.xpath("//ol[contains(@id, 'b')]")); 
+		// We Use Actions class for drag and drop.
+		actions.dragAndDrop(sourceLocator, targetLocator).build().perform();
+		pause(5000);		
+		
+	}
 	
+	// not important
+	public void use_of_slider_action () {
+		pause(3000);	
+		driver.get("https://demoqa.com/slider/");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		// Retrieve WebElemnt 'slider' to perform mouse hover
+		// This is the field where volume is increased
+		WebElement slider = driver.findElement(By.cssSelector("input.range-slider.range-slider--primary"));
+		// Move mouse to x offset 50 i.e. in horizontal direction
+		pause(3000);
+		// to test the slider is working or not
+		// dragAndDropBy (element, int xoffset, int yoffset)
+		actions.dragAndDropBy(slider, 50, 0).build().perform(); 
+		// learn from here, 50 is in pixel which might not match with real volume change, real volume 60
+		pause(5000);
+		// slider.click();
+		System.out.println("Moved slider in horizontal directions");
+	}
 	
+	// How to read the content of a Table 
+	public void read_table () {
+		pause(5000);	
+		driver.get("https://www.amazon.com/");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		pause(5000);	
+		// Scrolled to the end of page
+		actions.keyDown(Keys.CONTROL).sendKeys(Keys.END).perform();
+		pause(5000);	
+		// WebElement table = driver.findElement(By.tagName("table")); // tag as a locator 
+		WebElement table = driver.findElement(By.cssSelector("table.navFooterMoreOnAmazon")); 
+		System.out.println(table.getText());
+		pause(5000);		
+	}
 	
+	// How to read the row of a Table 
+	public void read_any_row_of_the_table () {
+		pause(5000);	
+		driver.get("https://www.amazon.com");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(40));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		pause(5000);	
+		actions = new Actions(driver); 
+		actions.keyDown(Keys.CONTROL).sendKeys(Keys.END).perform();
+		pause(5000);	
+		WebElement row = driver.findElement(By.cssSelector("table.navFooterMoreOnAmazon tr:nth-child(1)")); 
+		System.out.println(row.getText());
+		pause(5000);
+	}
+	
+	// How to read any cell of a row of the Table 
+	public void read_any_cell_of_a_row_of_the_table () {
+		pause(5000);	
+		driver.get("https://www.amazon.com");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		pause(5000);	
+		//actions = new Actions(driver); 
+		actions.keyDown(Keys.CONTROL).sendKeys(Keys.END).perform();
+		pause(5000);
+		WebElement cell = driver.findElement(By.cssSelector("table.navFooterMoreOnAmazon tr:nth-child(1) td:nth-child(7)"));
+		// WebElement cell = driver.findElement(By.tagName("table tr:nth-child(1) td:nth-child(7)")); // Not working
+		System.out.println(cell.getText());
+		pause(3000);
+	}
+	
+	// regarding TestNG 
+	// use of groups
+	public void getMethodsOfThePage03() {
+		String actual = driver.getTitle();
+		System.out.println("Title name: "+ actual);
+		String expected = "CMS Enterprise Portal";
+		Assert.assertEquals(actual, expected, "Home Page Title doesn't match ....... ");		
+	}
+	
+	public void getMethodsOfThePage04() {
+		String actual = driver.getTitle();
+		System.out.println("Title name: "+ actual);
+		String expected = "CMS Enterprise Portal";
+		Assert.assertEquals(actual, expected, "Home Page Title doesn't match ....... ");		
+	}
+	
+	public void getMethodsOfThePage05() {
+		String actual = driver.getTitle();
+		System.out.println("Title name: "+ actual);
+		String expected = "CMS Enterprise Portal";
+		Assert.assertEquals(actual, expected, "Home Page Title doesn't match ....... ");		
+	}
+	
+	public void use_of_expectedExceptions01 () {
+		System.out.println("We can verify whether a code throws the expected exception or not. Here it will fail");
+		int i = 1/0;	
+	}
+	
+	public void use_of_expectedExceptions02 () {
+		System.out.println("We can verify whether a code throws the expected exception or not. Here it will Pass");
+		int i = 1/0;	
+	}
+	
+	public void use_of_expectedExceptions03 () {
+		driver.findElement(By.id("xxs-login-submit")).click(); // cms login button
+		pause(4);
+	}
+	
+	// for test dependOnMethod()
+	public void new_user_registration_button_enabled(){
+		WebElement nur = driver.findElement(By.xpath("//a[contains(text(), 'New User Registration')]"));
+		boolean buttonEnabled = nur.isEnabled();			
+		System.out.println("Is the Button Enabled? Ans: "+ buttonEnabled);
+		Assert.assertTrue(true, "The New User Registration Button is disable .....");	
+	}
+	
+	public void newUserRegistrationButtonClick() {
+		driver.findElement(By.xpath("//a[contains(text(), 'New User Registration')]")).click();
+		pause(3000);
+		System.out.println(driver.getCurrentUrl());
+		System.out.println(driver.getTitle());
+	}
+	
+	// This test to explain the next one, it is not tested
+	public void nonSkipHomePageTitleTest() {
+		String expected = "CMS Enterprise Portal";
+		String actual = driver.getTitle();
+		System.out.println("home page title is: " + actual);
+		Assert.assertEquals(actual, expected, "Home Page Title doesn't match...");	
+		System.out.println("No need to skip the test");
+	}	
+	
+	// how to handle Exception: try, catch, throw, throws, finally
+	// below examples of where 'throw' is used
+	// Que: How to skip a test? Ans: by "throw new SkipException()" method
+	public void skipHomePageTitle01() {
+		String expected = "CMS Enterprise Portal";
+		if(expected.equals(driver.getTitle())) {
+			throw new SkipException("Skipping -- as the title matches as expected");
+			// if above condition is true, then no more below execution
+		} else {
+			System.out.println("Home Page Title doesn't match...");
+		}
+		System.out.println("I am out of the if else condition");
+	}
+	
+	public void skipHomePageTitle02() {
+		String expected = "      CMS Enterprise Portal"; // title will not match
+		if(expected.equals(driver.getTitle())) {
+			throw new SkipException("Skipping -- as the title matches as expected");
+		} else {
+			System.out.println("Home Page Title doesn't match...");
+		}
+		System.out.println("I am out of the if else condition");
+	}
+	
+	public void getMethodsOfThePage06() {
+		String actual = driver.getTitle();
+		System.out.println("Title name: "+ actual);
+		String expected = "CMS Enterprise Portal";
+		Assert.assertEquals(actual, expected, "Home Page Title doesn't match ....... ");		
+	}
+	
+	public void getMethodsOfThePage07() {
+		String actual = driver.getTitle();
+		System.out.println("Title name: "+ actual);
+		String expected = "CMS Enterprise Portal";
+		Assert.assertEquals(actual, expected, "Home Page Title doesn't match ....... ");	
+		System.out.println("Thread: "+ Thread.currentThread().getName()); // to know which thread is running
+	}
+	
+
+
+
+
+
 
 	
 	

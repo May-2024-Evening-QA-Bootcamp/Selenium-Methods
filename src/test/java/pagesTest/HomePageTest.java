@@ -1,26 +1,15 @@
 package pagesTest;
 
-
-import static common.CommonActions.clickElement;
-import static common.CommonActions.clickUsingJavascriptExecutor;
-import static common.CommonActions.elementDisplayed;
-import static common.CommonActions.elementEnabled;
-import static common.CommonActions.elementSelected;
-import static common.CommonActions.getAttributeValue;
-import static common.CommonActions.inputTextUsingJavascriptExecutor;
-import static common.CommonActions.pause;
-import static common.CommonActions.scrollIntoViewTheElementUsingJavascriptExecutor;
-import static common.CommonActions.verifyTextOfTheWebElement;
-import static common.CommonWaits.waitUntilConditionThenClick;
-
 import java.awt.AWTException;
-import java.util.Set;
+import java.time.Duration;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.testng.annotations.Test;
 import baseUtil.BaseClass;
-import constants.Attribute;
 
 public class HomePageTest extends BaseClass {
 	
@@ -329,76 +318,213 @@ public class HomePageTest extends BaseClass {
 		homePage. authentication_pop_up ();
 	}
 	
-	@Test()
+	@Test
 	public void use_of_right_click_action_test () {
 		homePage.use_of_right_click_action ();
 	}
 
-	@Test()
+	@Test
 	public void use_of_double_click_action_test () throws InterruptedException {
 		homePage.use_of_double_click_action ();
 	}
 	
-	
-	
-	/*
-	
-	
-	
-	
-	
-	
-	
-		
-	
-	
-	
-	
-	
-	
-	
-
-	
-		
-	@Test(enabled = false)
+	@Test
 	public void use_of_drag_and_drop_action_test () throws InterruptedException {
 		homePage.use_of_drag_and_drop_action ();
 	}
 	
-	@Test(enabled = false)
+	@Test
 	public void use_of_slider_action_test () {
 		homePage.use_of_slider_action ();
 	}
 	
-	@Test(enabled = false)
-	public void use_of_slider_action_alternate_test () {
-		homePage.use_of_slider_action_alternate ();
-	}
-	
-	@Test(enabled = false)
+	@Test
 	public void read_table_test () {
 		homePage.read_table ();
 	}
 	
-	@Test(enabled = false)
+	@Test
 	public void read_any_row_of_the_table_test ()  {
 		homePage.read_any_row_of_the_table ();
 	}
 	
-	@Test(enabled = false)
+	@Test
 	public void read_any_cell_of_a_row_of_the_table () {
 		homePage.read_any_cell_of_a_row_of_the_table ();
+	}
+	
+	@Test(enabled = false, priority = 3, groups = {"functionalTest", "sanityTest", "smokeTest", "regressionTest"})
+	public void getMethodsOfThePage03Test() {
+		homePage.getMethodsOfThePage03();
+	}
+	 
+	@Test(enabled = false, priority = 1, groups = {"regressionTest"})
+	public void getMethodsOfThePage04Test() {
+		homePage.getMethodsOfThePage04();
+	}
+	
+	@Test(enabled = false, priority = 2, groups = {"functionalTest", "sanityTest"})
+	public void getMethodsOfThePage05Test() {
+		homePage.getMethodsOfThePage05();
+	}
+	
+	@Test
+	public void use_of_expectedExceptions01Test () {
+		homePage.use_of_expectedExceptions01();
+	}
+	
+	@Test(expectedExceptions = ArithmeticException.class)
+	public void use_of_expectedExceptions02Test () {
+		homePage.use_of_expectedExceptions02();
+	}
+	
+	// It will fail as element is not found
+	@Test
+	public void use_of_expectedExceptions03Test () {
+		homePage.use_of_expectedExceptions03();
+	}
+	
+	@Test(expectedExceptions = org.openqa.selenium.NoSuchElementException.class)
+	public void use_of_expectedExceptions04Test () {
+		homePage.use_of_expectedExceptions03();
+	}
+	
+	@Test
+	public void new_user_registration_button_enabled_test(){
+		homePage.new_user_registration_button_enabled();
+	}
+	
+	// Important interview question
+	// use of dependsOnMethods
+	// change the new_user_registration_button_enabled method to fail 
+	// and see the above method skipped as it depends on new_user_registration_button_enabled
+	
+	
+	@Test(dependsOnMethods = "new_user_registration_button_enabled_test")
+	public void newUserRegistrationButtonClickTest() {
+		homePage.newUserRegistrationButtonClick();
+	}
+	
+	@Test
+	public void skipHomePageTitle01Test() {
+		homePage.skipHomePageTitle01();
+	}
+	
+	@Test
+	public void skipHomePageTitle02Test() {
+		homePage.skipHomePageTitle02();
+	}
+	
+	// use of invocation count, when? -- if you know some test cases fail for no reason
+	// and then you fix it, you can run more than one time time by invocation count	
+	@Test(invocationCount = 5, timeOut = 10000)
+	public void getMethodsOfThePage06Test() {
+		homePage.getMethodsOfThePage06();
+	}
+	
+	// use of threadPoolSize
+	//TODO Is the threadPoolSize working? No, because we need multiple thread in multiple device connected
+	// may be working as multi threaded, can't see, need to be make sure
+	@Test(invocationCount = 6, threadPoolSize = 3, timeOut = 10000)
+	public void getMethodsOfThePage07Test() {
+		homePage.getMethodsOfThePage07();
 	}
 	
 	
 	
 	
-	
-	
-	
-	 */
+	// Below we wrote the code directly in test cases, you will not find any code in HomePage
+	// interview question: what are the alternative of click(), 
+	// but they are not expecting first 2 answer, they are looking for javascriptExecutor
+	// alternate of click()
+	@Test(enabled = false)
+	public void alternate_of_click_method_in_loginButtonTest01() throws InterruptedException {
+		driver.findElement(By.id("cms-login-submit")).sendKeys(Keys.ENTER);
+		Thread.sleep(3000);
+	}
 	
 
+	// alternate of click()
+	@Test(enabled = false)
+	public void alternate_of_click_method_in_loginButtonTest02() throws InterruptedException {
+		driver.findElement(By.id("cms-login-submit")).sendKeys(Keys.RETURN);
+		Thread.sleep(3000);
+	}
 	
-
+	// Important interview question + they ask you to write the code in MS word
+	// so, practice it by paper pen, then in ms word
+	// alternate of click()
+	@Test(enabled = false)
+	public void alternate_of_click_method_in_loginButtonTest03() throws InterruptedException {
+		WebElement loginButton = driver.findElement(By.id("cms-login-submit"));
+		JavascriptExecutor js = (JavascriptExecutor) driver; // We don't need it here
+		// Because JavascriptExecutor Interface is instantiated in base class, js object came form there
+		js.executeScript("arguments[0].click()", loginButton);
+		// arguments[0] means, find the web element of index 0, first occurrence
+		Thread.sleep(4000);
+	}
+	
+	// alternate of click()
+	// "arguments[0].click()" ---> above is easy to memorize, memorize it, if you want
+	// follow the above one, because you can use any kind of locator 
+	// (specially xpath is difficult to create by below one)
+	// don't follow this one, but if you ever see it, i hope you can recognize it
+	@Test(enabled = false)
+	public void alternate_of_click_method_in_loginButtonTest04() throws InterruptedException {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("document.getElementById('cms-login-submit').click();");
+		Thread.sleep(4000);
+	}
+	
+	// below is high level, so just see, don't take them seriously
+	// alternative to click an web element in many ways (never memorize, a collection of code)
+	
+	// Not important
+	
+	// alternate of click()
+	@Test
+	public void homepageLoginButtonTest06() {
+		WebElement homepageLoginButton = driver.findElement(By.xpath("//button[@id='cms-login-submit']"));
+		Actions actions = new Actions(driver);
+		actions.click(homepageLoginButton).perform();
+	}
+	
+	// Not important
+	// alternate of click()
+	@Test
+	public void homepageLoginButtonTest07() {
+		WebElement homepageLoginButton = driver.findElement(By.xpath("//button[@id='cms-login-submit']"));
+		Actions actions = new Actions(driver);
+		actions.moveToElement(homepageLoginButton).click().perform();
+	}
+	
+	// Not important
+	// alternate of click()
+	@Test
+	public void homepageLoginButtonTest08() {
+		WebElement homepageLoginButton = driver.findElement(By.xpath("//button[@id='cms-login-submit']"));
+		Actions actions = new Actions(driver);
+		actions.clickAndHold(homepageLoginButton).release().perform();
+	}
+	
+	// Not important
+	// alternate of click()
+	@Test
+	public void homepageLoginButtonTest09() {
+		WebElement homepageLoginButton = driver.findElement(By.xpath("//button[@id='cms-login-submit']"));
+		Actions actions = new Actions(driver);
+		actions.sendKeys(homepageLoginButton, Keys.RETURN).perform();
+	}
+	
+	// Sets the amount of time to wait for an asynchronous script to finish execution before throwing an error. 
+	// not important at all
+	@SuppressWarnings("deprecation")
+	@Test(enabled = false)
+	public void use_of_set_script_timeout_for_window() {
+		driver.manage().timeouts().setScriptTimeout(Duration.ofSeconds(15));
+		// setScriptTimeout () method deprecated, so giving you warning, this method is going to be out from selenium
+        // you use @SuppressWarnings("deprecation")
+		driver.get("https://www.ebay.com");	
+	}
+		
 }
