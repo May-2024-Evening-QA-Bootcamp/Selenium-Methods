@@ -9,8 +9,10 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.Optional;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
@@ -35,11 +37,17 @@ public class BaseClass {
 	Configuration configuration;
 	ExtentReports extentReports;
 	ExtentTest extentTest;
+	String browsername;
 	
 
 	@BeforeSuite
 	public void initialReporting() {
 		extentReports = ExtentReportManager.initialReports();
+	}
+	
+	@BeforeClass
+	public void beforeClassSetUp() {
+		configuration = new Configuration();
 	}
 	
 	// newly added
@@ -50,9 +58,18 @@ public class BaseClass {
 	}
 	
 	@BeforeMethod
-	public void setUp() {
-		configuration = new Configuration();
-		initDriver();
+	public void setUp(@Optional(CHROME) String browserName) {
+		// If any reason, in our test suit, parameter is absent, 
+		// then @Optional(CHROME) will work
+		
+		// spelling mistake in testng.xml suite, then browser will not match and get the default one
+		// WebdriverManager is instantiating the ChromeDriver
+			
+		// If we run from TestClass, which browser will run?
+		// Chrome, why? browser is absent in config.properties file, so it is taking from @Optional
+		
+		// this.browsername = browserName;
+		initDriver(browserName);
 		driver.manage().window().maximize();
 		driver.manage().deleteAllCookies();
 		driver.get(configuration.getProperties(URL));
@@ -66,8 +83,11 @@ public class BaseClass {
 	
 	// TODO: Nasir, explicitly wait should be connected from here
 
-	public void initDriver() {
-		String browserName = configuration.getProperties(BROWSER);
+ 
+	public void initDriver(String browserName) {
+		// String browserName = configuration.getProperties(BROWSER);
+		// we remove browser from config.properties file
+		// above line will be deleted and line 34 added
 
 		switch (browserName) {
 		case CHROME:
@@ -89,6 +109,12 @@ public class BaseClass {
 			WebDriverManager.chromedriver().setup();
 			driver = new ChromeDriver();
 			break;
+			
+		/*
+		 When we run the test from test class directly [@Test]
+		 when we get the browser name from properties class, if name spelling wrong, "silver"
+		 Then the default will run
+		 */	
 		}
 
 	}

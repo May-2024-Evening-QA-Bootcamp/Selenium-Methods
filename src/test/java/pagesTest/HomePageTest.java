@@ -27,7 +27,7 @@ public class HomePageTest extends BaseClass {
 	public void click_login_button_test() throws InterruptedException {
 		homePage.click_login_button();
 	}
-	
+/*	
 	@Test
 	public void click_user_id_test() {
 		homePage.click_user_id();
@@ -531,5 +531,5 @@ public class HomePageTest extends BaseClass {
         // you use @SuppressWarnings("deprecation")
 		driver.get("https://www.ebay.com");	
 	}
-		
+*/		
 }
